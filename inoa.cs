@@ -129,12 +129,23 @@ class Program
 
             string responseBody = await response.Content.ReadAsStringAsync();
 
-
-
-            // ADICIONAR A LÓGICA PARA ANALISAR O JSON E PEGAR O PREÇO.
-            // Por enquanto, retornar um valor de teste para que o programa compile.
+            AlphaVantageApiResponse apiResponse = JsonSerializer.Deserialize<AlphaVantageApiResponse>(responseBody);
             
-            return 22.50M;
+            if (apiResponse?.GlobalQuote == null || string.IsNullOrEmpty(apiResponse.GlobalQuote.PriceString))
+            {
+                // Se o JSON não tiver os dados de cotação, lança uma exceção.
+                throw new Exception($"Não foi possível obter a cotação para o símbolo '{symbol}'. Verifique se o símbolo está correto.");
+            }
+
+            if (decimal.TryParse(apiResponse.GlobalQuote.PriceString, out decimal price))
+            {
+                return price;
+            }
+            else
+            {
+                // Se a conversão falhar, lança uma exceção.
+                throw new Exception($"Erro ao converter o preço '{apiResponse.GlobalQuote.PriceString}' para número.");
+            }
         }
     }
 }
