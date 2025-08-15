@@ -1,0 +1,9 @@
+{
+  "EmailConfig": {
+    "ToEmail": "seu_email_de_destino@exemplo.com",
+    "SmtpServer": "smtp.exemplo.com",
+    "SmtpPort": 587,
+    "SmtpUsername": "seu_email_de_alerta@exemplo.com",
+    "SmtpPassword": "sua_senha_ou_senha_de_aplicativo"
+  }
+}
