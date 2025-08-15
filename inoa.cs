@@ -3,7 +3,8 @@ using System.IO;
 using System.Text.Json;
 using System.Net.Http;
 using System.Threading.Tasks;
-
+using System.Net;
+using System.Net.Mail;
 class Program
 {
     static async Task Main(string[] args)
@@ -92,14 +93,21 @@ class Program
                 {
                     Console.WriteLine("Cotação subiu! Alerta de VENDA.");
 
-                    // Chamar o método de envio de e-mail 
+                    string subject = $"Alerta de VENDA: {ativo} em alta!";
+                    string body = $"A cotação de **{ativo}** subiu para **{currentPrice:C}**, ultrapassando o valor de referência de VENDA de {precoVenda:C}.";
+                    
+                    // Chama o método para enviar o e-mail de venda.
+                    await SendEmailAlert(settings.EmailConfig.ToEmail, subject, body, settings.EmailConfig);
 
                 }
                 else if (currentPrice < precoCompra)
                 {
                     Console.WriteLine("Cotação caiu! Alerta de COMPRA.");
 
-                    // Chamar o método de envio de e-mail aqui
+                    string body = $"A cotação de **{ativo}** caiu para **{currentPrice:C}**, atingindo o valor de referência de COMPRA de {precoCompra:C}.";
+
+                    // Chama o método para enviar o e-mail de compra.
+                    await SendEmailAlert(settings.EmailConfig.ToEmail, subject, body, settings.EmailConfig);
 
                 }
                 else
@@ -116,21 +124,21 @@ class Program
             await Task.Delay(300000);
         }
     }
-    
-        private static async Task<decimal> GetStockQuote(string symbol, string apiKey)
+
+    private static async Task<decimal> GetStockQuote(string symbol, string apiKey)
     {
         using (var client = new HttpClient())
         {
             string url = $"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={apiKey}";
-            
+
             HttpResponseMessage response = await client.GetAsync(url);
-            
+
             response.EnsureSuccessStatusCode();
 
             string responseBody = await response.Content.ReadAsStringAsync();
 
             AlphaVantageApiResponse apiResponse = JsonSerializer.Deserialize<AlphaVantageApiResponse>(responseBody);
-            
+
             if (apiResponse?.GlobalQuote == null || string.IsNullOrEmpty(apiResponse.GlobalQuote.PriceString))
             {
                 // Se o JSON não tiver os dados de cotação, lança uma exceção.
@@ -146,6 +154,43 @@ class Program
                 // Se a conversão falhar, lança uma exceção.
                 throw new Exception($"Erro ao converter o preço '{apiResponse.GlobalQuote.PriceString}' para número.");
             }
+        }
+    }
+    
+    private static async Task SendEmailAlert(string toEmail, string subject, string body, EmailConfig config)
+    {
+        try
+        {
+            var smtpClient = new SmtpClient(config.SmtpServer, config.SmtpPort)
+            {
+                EnableSsl = true,
+                Credentials = new NetworkCredential(config.SmtpUsername, config.SmtpPassword),
+            };
+
+            // Cria a mensagem de e-mail
+            var mailMessage = new MailMessage
+            {
+                // O e-mail de quem está enviando
+                From = new MailAddress(config.SmtpUsername),
+                // O assunto do e-mail.
+                Subject = subject,
+                // O corpo do e-mail.
+                Body = body,
+                // Define o corpo como HTML.
+                IsBodyHtml = true,
+            };
+            
+            // Adiciona o e-mail do destinatário.
+            mailMessage.To.Add(toEmail);
+
+            // Envia o e-mail de forma assíncrona.
+            await smtpClient.SendMailAsync(mailMessage);
+
+            Console.WriteLine($"Alerta de e-mail enviado com sucesso para {toEmail}.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao enviar o e-mail: {ex.Message}");
         }
     }
 }
