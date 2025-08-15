@@ -1,10 +1,10 @@
 {
   "EmailConfig": {
-    "ToEmail": "seu_email_de_destino@exemplo.com",
-    "SmtpServer": "smtp.exemplo.com",
+    "ToEmail": "exemplo@gmail.com",
+    "SmtpServer": "smtp.gmail.com",
     "SmtpPort": 587,
-    "SmtpUsername": "seu_email_de_alerta@exemplo.com",
-    "SmtpPassword": "sua_senha_ou_senha_de_aplicativo"
+    "SmtpUsername": "exemplo@gmail.com",
+    "SmtpPassword": "senhha"
   },
   "ApiConfig": {
     "ApiKey": "UTTTUNGZTD4PNNUZ"

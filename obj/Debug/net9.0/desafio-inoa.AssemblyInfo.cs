@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("desafio-inoa")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae3d7a8c8f9feefb79d22125aea0bf708b6839ec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb74eb23a22123b481f917aa1a4f5f8bd01039a0")]
 [assembly: System.Reflection.AssemblyProductAttribute("desafio-inoa")]
 [assembly: System.Reflection.AssemblyTitleAttribute("desafio-inoa")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

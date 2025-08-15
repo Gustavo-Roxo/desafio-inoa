@@ -5,24 +5,22 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
+
 class Program
 {
     static async Task Main(string[] args)
     {
-        // Verifica se o número de argumentos é o esperado
         if (args.Length != 3)
         {
             Console.WriteLine("Uso: inoa.exe <ativo> <preco_venda> <preco_compra>");
             Console.WriteLine("Exemplo: inoa.exe PETR4 22.67 22.59");
-            return; // Encerra a aplicação
+            return;
         }
 
-        // Extrai os argumentos para variáveis
         string ativo = args[0];
         string precoVendaString = args[1];
         string precoCompraString = args[2];
 
-        // Converte os preços para o tipo decimal
         decimal precoVenda;
         decimal precoCompra;
 
@@ -38,7 +36,6 @@ class Program
             return;
         }
 
-        // Ler o arquivo de configuração
         string configFilePath = "settings.json";
 
         if (!File.Exists(configFilePath))
@@ -47,12 +44,12 @@ class Program
             return;
         }
 
-        string jsonContent = File.ReadAllText(configFilePath);
+        AppSettings? settings = null;
 
-        // Desserializar o JSON para o objeto AppSettings
         try
         {
-            AppSettings settings = JsonSerializer.Deserialize<AppSettings>(jsonContent);
+            string jsonContent = File.ReadAllText(configFilePath);
+            settings = JsonSerializer.Deserialize<AppSettings>(jsonContent);
 
             if (settings?.EmailConfig == null)
             {
@@ -67,7 +64,6 @@ class Program
             }
 
             Console.WriteLine("Configurações de e-mail lidas com sucesso.");
-
         }
         catch (JsonException ex)
         {
@@ -83,32 +79,29 @@ class Program
         {
             try
             {
+                if (settings?.ApiConfig?.ApiKey == null)
+                {
+                    Console.WriteLine("Erro: A chave da API não foi encontrada nas configurações.");
+                    return;
+                }
+
                 decimal currentPrice = await GetStockQuote(ativo, settings.ApiConfig.ApiKey);
 
                 Console.WriteLine($"Cotação atual de {ativo}: {currentPrice:C}");
 
-                // Lógica de envio de e-mail
-
                 if (currentPrice > precoVenda)
                 {
                     Console.WriteLine("Cotação subiu! Alerta de VENDA.");
-
                     string subject = $"Alerta de VENDA: {ativo} em alta!";
                     string body = $"A cotação de **{ativo}** subiu para **{currentPrice:C}**, ultrapassando o valor de referência de VENDA de {precoVenda:C}.";
-                    
-                    // Chama o método para enviar o e-mail de venda.
-                    await SendEmailAlert(settings.EmailConfig.ToEmail, subject, body, settings.EmailConfig);
-
+                    await SendEmailAlert(settings.EmailConfig?.ToEmail, subject, body, settings.EmailConfig);
                 }
                 else if (currentPrice < precoCompra)
                 {
                     Console.WriteLine("Cotação caiu! Alerta de COMPRA.");
-
+                    string subject = $"Alerta de COMPRA: {ativo} em baixa!";
                     string body = $"A cotação de **{ativo}** caiu para **{currentPrice:C}**, atingindo o valor de referência de COMPRA de {precoCompra:C}.";
-
-                    // Chama o método para enviar o e-mail de compra.
-                    await SendEmailAlert(settings.EmailConfig.ToEmail, subject, body, settings.EmailConfig);
-
+                    await SendEmailAlert(settings.EmailConfig?.ToEmail, subject, body, settings.EmailConfig);
                 }
                 else
                 {
@@ -119,8 +112,6 @@ class Program
             {
                 Console.WriteLine($"Ocorreu um erro: {ex.Message}");
             }
-
-            // Pausa o programa por 5 minutos antes da próxima verificação.
             await Task.Delay(300000);
         }
     }
@@ -130,18 +121,13 @@ class Program
         using (var client = new HttpClient())
         {
             string url = $"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={apiKey}";
-
             HttpResponseMessage response = await client.GetAsync(url);
-
             response.EnsureSuccessStatusCode();
-
             string responseBody = await response.Content.ReadAsStringAsync();
-
-            AlphaVantageApiResponse apiResponse = JsonSerializer.Deserialize<AlphaVantageApiResponse>(responseBody);
-
+            AlphaVantageApiResponse? apiResponse = JsonSerializer.Deserialize<AlphaVantageApiResponse>(responseBody);
+            
             if (apiResponse?.GlobalQuote == null || string.IsNullOrEmpty(apiResponse.GlobalQuote.PriceString))
             {
-                // Se o JSON não tiver os dados de cotação, lança uma exceção.
                 throw new Exception($"Não foi possível obter a cotação para o símbolo '{symbol}'. Verifique se o símbolo está correto.");
             }
 
@@ -151,42 +137,41 @@ class Program
             }
             else
             {
-                // Se a conversão falhar, lança uma exceção.
                 throw new Exception($"Erro ao converter o preço '{apiResponse.GlobalQuote.PriceString}' para número.");
             }
         }
     }
     
-    private static async Task SendEmailAlert(string toEmail, string subject, string body, EmailConfig config)
+    private static async Task SendEmailAlert(string? toEmail, string subject, string body, EmailConfig? config)
     {
         try
         {
+            if (config?.SmtpServer == null || config.SmtpUsername == null || config.SmtpPassword == null)
+            {
+                Console.WriteLine("Erro: Configurações de e-mail incompletas.");
+                return;
+            }
+
             var smtpClient = new SmtpClient(config.SmtpServer, config.SmtpPort)
             {
                 EnableSsl = true,
                 Credentials = new NetworkCredential(config.SmtpUsername, config.SmtpPassword),
             };
 
-            // Cria a mensagem de e-mail
             var mailMessage = new MailMessage
             {
-                // O e-mail de quem está enviando
                 From = new MailAddress(config.SmtpUsername),
-                // O assunto do e-mail.
                 Subject = subject,
-                // O corpo do e-mail.
                 Body = body,
-                // Define o corpo como HTML.
                 IsBodyHtml = true,
             };
             
-            // Adiciona o e-mail do destinatário.
-            mailMessage.To.Add(toEmail);
-
-            // Envia o e-mail de forma assíncrona.
-            await smtpClient.SendMailAsync(mailMessage);
-
-            Console.WriteLine($"Alerta de e-mail enviado com sucesso para {toEmail}.");
+            if (toEmail != null)
+            {
+                mailMessage.To.Add(toEmail);
+                await smtpClient.SendMailAsync(mailMessage);
+                Console.WriteLine($"Alerta de e-mail enviado com sucesso para {toEmail}.");
+            }
         }
         catch (Exception ex)
         {
