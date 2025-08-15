@@ -5,5 +5,8 @@
     "SmtpPort": 587,
     "SmtpUsername": "seu_email_de_alerta@exemplo.com",
     "SmtpPassword": "sua_senha_ou_senha_de_aplicativo"
+  },
+  "ApiConfig": {
+    "ApiKey": "UTTTUNGZTD4PNNUZ"
   }
 }
