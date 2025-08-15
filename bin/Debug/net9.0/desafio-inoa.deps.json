@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "desafio-inoa/1.0.0": {
+        "runtime": {
+          "desafio-inoa.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "desafio-inoa/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

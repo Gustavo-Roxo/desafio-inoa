@@ -1,0 +1,15 @@
+C:\Users\gugaa\Desktop\Git\desafio-inoa\bin\Debug\net9.0\desafio-inoa.exe
+C:\Users\gugaa\Desktop\Git\desafio-inoa\bin\Debug\net9.0\desafio-inoa.deps.json
+C:\Users\gugaa\Desktop\Git\desafio-inoa\bin\Debug\net9.0\desafio-inoa.runtimeconfig.json
+C:\Users\gugaa\Desktop\Git\desafio-inoa\bin\Debug\net9.0\desafio-inoa.dll
+C:\Users\gugaa\Desktop\Git\desafio-inoa\bin\Debug\net9.0\desafio-inoa.pdb
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.AssemblyInfoInputs.cache
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.AssemblyInfo.cs
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.csproj.CoreCompileInputs.cache
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.sourcelink.json
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.dll
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\refint\desafio-inoa.dll
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.pdb
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\desafio-inoa.genruntimeconfig.cache
+C:\Users\gugaa\Desktop\Git\desafio-inoa\obj\Debug\net9.0\ref\desafio-inoa.dll
