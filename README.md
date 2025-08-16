@@ -22,7 +22,9 @@ JSON
     "ApiKey": "SUA_CHAVE_DA_ALPHA_VANTAGE_AQUI"
   }
 }
+
 2. Executando a Aplicação
+
 Use o comando dotnet run no terminal, passando o ativo e os preços de referência como argumentos.
 
 Formato do Comando:
@@ -30,6 +32,7 @@ Formato do Comando:
 Bash
 
 dotnet run <simbolo_do_ativo> <preco_de_venda> <preco_de_compra>
+
 Exemplo:
 Para monitorar a PETR4, enviando um alerta de venda se o preço subir acima de R$ 22,67 e um alerta de compra se cair abaixo de R$ 22,59:
 
