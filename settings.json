@@ -3,7 +3,7 @@
     "ToEmail": "exemplo@gmail.com",
     "SmtpServer": "smtp.gmail.com",
     "SmtpPort": 587,
-    "SmtpUsername": "exemplo@gmail.com",
+    "SmtpUsername": "guga.amaralroxo@gmail.com",
     "SmtpPassword": "senhha"
   },
   "ApiConfig": {
