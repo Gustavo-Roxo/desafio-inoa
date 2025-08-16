@@ -12,7 +12,7 @@ class Program
         if (args.Length != 3)
         {
             Console.WriteLine("Uso: inoa.exe <ativo> <preco_venda> <preco_compra>");
-            Console.WriteLine("Exemplo: inoa.exe PETR4 22.67 22.59");
+            Console.WriteLine("Exemplo: inoa.exe PETR4.SA 22.67 22.59");
             return;
         }
 
