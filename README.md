@@ -15,7 +15,7 @@ JSON
     "ToEmail": "seu_email_de_destino@exemplo.com",
     "SmtpServer": "smtp.gmail.com",
     "SmtpPort": 587,
-    "SmtpUsername": "seu_email_de_envio@gmail.com",
+    "SmtpUsername": "guga.amaralroxo.com",
     "SmtpPassword": "sua_senha_de_aplicativo_aqui"
   },
   "ApiConfig": {
