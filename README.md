@@ -38,6 +38,6 @@ Para monitorar a PETR4, enviando um alerta de venda se o preço subir acima de R
 
 Bash
 
-dotnet run PETR4.SA 22.67 22.59
+dotnet run PETR4.SA 22,67 22,59
 Observação: O programa rodará em um loop infinito, verificando o preço a cada 5 minutos. Pressione Ctrl + C para encerrá-lo.
 

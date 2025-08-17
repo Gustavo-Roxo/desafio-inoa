@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
+using System.Globalization;
 class Program
 {
     static async Task Main(string[] args)
@@ -12,7 +13,7 @@ class Program
         if (args.Length != 3)
         {
             Console.WriteLine("Uso: inoa.exe <ativo> <preco_venda> <preco_compra>");
-            Console.WriteLine("Exemplo: inoa.exe PETR4.SA 22.67 22.59");
+            Console.WriteLine("Exemplo: inoa.exe PETR4.SA 22,67 22,59");
             return;
         }
 
@@ -130,7 +131,7 @@ class Program
                 throw new Exception($"Não foi possível obter a cotação para o símbolo '{symbol}'. Verifique se o símbolo está correto.");
             }
 
-            if (decimal.TryParse(apiResponse.GlobalQuote.PriceString, out decimal price))
+            if (decimal.TryParse(apiResponse.GlobalQuote.PriceString, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
             {
                 return price;
             }
